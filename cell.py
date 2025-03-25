@@ -9,6 +9,21 @@ BLUE = (0, 0, 255)
 GRAY = (200, 200, 200)
 DARK_GRAY = (100, 100, 100)
 
+# Import files
+spr_emptyGrid = pygame.image.load("Sprites/empty.png")
+spr_flag = pygame.image.load("Sprites/flag.png")
+spr_grid = pygame.image.load("Sprites/Grid.png")
+spr_grid1 = pygame.image.load("Sprites/grid1.png")
+spr_grid2 = pygame.image.load("Sprites/grid2.png")
+spr_grid3 = pygame.image.load("Sprites/grid3.png")
+spr_grid4 = pygame.image.load("Sprites/grid4.png")
+spr_grid5 = pygame.image.load("Sprites/grid5.png")
+spr_grid6 = pygame.image.load("Sprites/grid6.png")
+spr_grid7 = pygame.image.load("Sprites/grid7.png")
+spr_grid8 = pygame.image.load("Sprites/grid8.png")
+spr_mine = pygame.image.load("Sprites/mine.png")
+spr_mineClicked = pygame.image.load("Sprites/mineClicked.png")
+spr_mineFalse = pygame.image.load("Sprites/mineFalse.png")
 
 
 class Cell:
