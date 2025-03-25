@@ -36,25 +36,37 @@ class Cell:
         self.is_revealed = False
         self.is_flagged = False
         self.mines_around = 0
-        self.font = pygame.font.SysFont(None, 36)
-
 
     def draw(self, screen):
         rect = pygame.Rect(self.x * self.size, self.y * self.size + self.shift, self.size, self.size)
+        Cell = Cell(self.x, self.y, self.size, self.shift)
         if self.is_revealed:
             if self.is_mine:
-                pygame.draw.rect(screen, RED, rect)
-                pygame.draw.circle(screen, BLACK, rect.center, self.size // 4)
+                Cell.blit(spr_mineClicked, rect)
             else:
-                pygame.draw.rect(screen, WHITE, rect)
+                Cell.blit(spr_emptyGrid, rect)
                 if self.mines_around > 0:
-                    text = self.font.render(str(self.mines_around), True, BLUE)
-                    text_rect = text.get_rect(center=rect.center)
-                    screen.blit(text, text_rect)
+                    if self.mines_around == 1:
+                        Cell.blit(spr_grid1, rect)
+                    elif self.mines_around == 2:
+                        Cell.blit(spr_grid2, rect)
+                    elif self.mines_around == 3:
+                        Cell.blit(spr_grid3, rect)
+                    elif self.mines_around == 4:
+                        Cell.blit(spr_grid4, rect)
+                    elif self.mines_around == 5:
+                        Cell.blit(spr_grid5, rect)
+                    elif self.mines_around == 6:
+                        Cell.blit(spr_grid6, rect)
+                    elif self.mines_around == 7:
+                        Cell.blit(spr_grid7, rect)
+                    elif self.mines_around == 8:
+                        Cell.blit(spr_grid8, rect)
         else:
-            pygame.draw.rect(screen, DARK_GRAY if self.is_flagged else GRAY, rect)
-        
-        pygame.draw.rect(screen, BLACK, rect, 1)
+            if self.is_flagged:
+                Cell.blit(spr_flag, rect)  
+            else:   
+                Cell.blit(spr_grid, rect)
 
 
     def toggle_flag(self):

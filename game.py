@@ -99,7 +99,7 @@ class Game:
 
     def draw_game_over(self):
         font = pygame.font.SysFont(None, 72)
-        game_over_text = font.render("Game Over", True, RED)
+        game_over_text = font.render("Game Over", True, BLACK)
         rect = game_over_text.get_rect(center=(self.screen_width // 2, self.screen_height // 2))
         self.screen.blit(game_over_text, rect)
 
@@ -107,7 +107,7 @@ class Game:
     
     def draw_win(self):
         font = pygame.font.SysFont(None, 72)
-        game_over_text = font.render("You Win", True, GREEN)
+        game_over_text = font.render("You Win!!", True, GREEN)
         rect = game_over_text.get_rect(center=(self.screen_width // 2, 0))
         self.screen.blit(game_over_text, rect)
 
