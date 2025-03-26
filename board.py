@@ -61,6 +61,7 @@ class Board:
         
         cell.revealed = True
         
+        #recursion
         if cell.neighbor_mines == 0:
             for dx in [-1, 0, 1]:
                 for dy in [-1, 0, 1]:

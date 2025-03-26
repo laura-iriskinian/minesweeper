@@ -1,11 +1,9 @@
 import pygame
-import random
-import time
 import os
+import json
 
 
 pygame.init()
-
 
 CELL_SIZE = 30
 MARGIN = 1
@@ -63,6 +61,38 @@ TEXTS = {
     'medium': "Medium",
     'hard': "Difficult"
 }
+
+def save_score(difficulty, score):
+    """Ajoute un nouveau score et sauvegarde les N meilleurs (plus bas) temps."""
+    # Nombre de scores à conserver
+    MAX_SCORES = 1  # Vous pouvez changer cette valeur
+
+    # Charger les scores existants
+    if os.path.exists("scores.json"):
+        with open("scores.json", "r") as f:
+            try:
+                scores = json.load(f)
+            except json.JSONDecodeError:
+                scores = {'easy': [], 'medium': [], 'hard': []}
+    else:
+        scores = {'easy': [], 'medium': [], 'hard': []}
+    
+    # Ajouter le nouveau score
+    if difficulty not in scores:
+        scores[difficulty] = []
+    
+    scores[difficulty].append(score)
+    # Garder uniquement les N plus bas temps
+    scores[difficulty] = sorted(scores[difficulty])[:MAX_SCORES]
+
+    # Sauvegarder les scores
+    with open("scores.json", "w") as f:
+        json.dump(scores, f, indent=4)
+
+def show_scores(self):
+    """Affiche les scores lorsqu'on clique sur le bouton."""
+    self.load_scores()  # Charger les scores depuis le fichier
+    self.showing_scores = True
 
 
 def load_image(name, size):
