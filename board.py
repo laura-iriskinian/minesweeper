@@ -52,9 +52,9 @@ class Board:
             return False
         
         if self.first_click:
-            self.place_mines((x, y))
             self.first_click = False
-        
+            self.place_mines((x, y))
+            
         if cell.is_mine:
             self.game_over = True
             return True

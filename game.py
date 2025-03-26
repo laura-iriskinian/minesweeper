@@ -92,7 +92,7 @@ class Game:
                     
                     if 0 <= x < self.board.width and 0 <= y < self.board.height:
                         if event.button == 1:  
-                            if self.start_time is None and not self.board.first_click:
+                            if self.start_time is None :
                                 self.start_time = time.time()
                             self.board.reveal(x, y)
                         elif event.button == 3:  

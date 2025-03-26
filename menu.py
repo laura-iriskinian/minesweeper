@@ -5,7 +5,7 @@ class Menu:
     def __init__(self, screen_width, screen_height):
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.title_font = pygame.font.SysFont('Arial', 50, bold=True)
+        self.title_font = pygame.font.SysFont('Arial', 50, bold=True, italic = True)
         self.button_font = pygame.font.SysFont('Arial', 30)
         
       

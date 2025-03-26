@@ -17,9 +17,9 @@ COLORS = {
     'numbers': [None, (0, 0, 255), (0, 128, 0), (255, 0, 0),
                 (0, 0, 128), (128, 0, 0), (0, 128, 128),
                 (0, 0, 0), (128, 128, 128)],
-    'menu_bg': (50, 50, 50),
-    'button': (100, 100, 100),
-    'button_hover': (150, 150, 150),
+    'menu_bg': (0, 102, 102),
+    'button': (153, 153, 204),
+    'button_hover': (51, 204, 102),
     'button_text': (255, 255, 255)
 }
 
@@ -76,17 +76,17 @@ def load_image(name, size):
         return surface
 
 
-if not os.path.exists('images'):
-    os.makedirs('images')
+# if not os.path.exists('images'):
+#     os.makedirs('images')
 
 
-if not os.path.exists('images/bomb.png'):
-    bomb_img = pygame.Surface((CELL_SIZE-10, CELL_SIZE-10))
-    bomb_img.fill((0, 0, 0))
-    pygame.draw.circle(bomb_img, (255, 0, 0), (CELL_SIZE//2-5, CELL_SIZE//2-5), CELL_SIZE//2-5)
-    pygame.image.save(bomb_img, 'images/bomb.png')
+# if not os.path.exists('images/bomb.png'):
+#     bomb_img = pygame.Surface((CELL_SIZE-10, CELL_SIZE-10))
+#     bomb_img.fill((0, 0, 0))
+#     pygame.draw.circle(bomb_img, (255, 0, 0), (CELL_SIZE//2-5, CELL_SIZE//2-5), CELL_SIZE//2-5)
+#     pygame.image.save(bomb_img, 'images/bomb.png')
 
-bomb_image = load_image('images/bomb.png', (CELL_SIZE-10, CELL_SIZE-10))
+# bomb_image = load_image('images/bomb.png', (CELL_SIZE-10, CELL_SIZE-10))
 
 
 
