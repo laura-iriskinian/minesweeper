@@ -52,9 +52,9 @@ class Board:
             return False
         
         if self.first_click:
-            self.place_mines((x, y))
             self.first_click = False
-        
+            self.place_mines((x, y))
+            
         if cell.is_mine:
             self.game_over = True
             return True
@@ -107,31 +107,24 @@ class Board:
         for y in range(self.height):
             for x in range(self.width):
                 cell = self.grid[y][x]
-                rect = pygame.Rect(
-                    x * (CELL_SIZE + MARGIN),
-                    y * (CELL_SIZE + MARGIN) + offset_y,
-                    CELL_SIZE,
-                    CELL_SIZE
-                )
-                
-                if cell.revealed:
-                    color = COLORS['revealed']
-                elif cell.flagged:
-                    color = COLORS['flag']
-                else:
-                    color = COLORS['hidden']
-                
-                pygame.draw.rect(screen, color, rect)
+                rect_x = x * (CELL_SIZE + MARGIN)
+                rect_y = y * (CELL_SIZE + MARGIN) + offset_y
                 
                 if cell.revealed:
                     if cell.is_mine:
-                        screen.blit(bomb_image, (rect.x+5, rect.y+5))
+                        if self.game_over:
+                            screen.blit(spr_mineClicked(rect_x, rect_y))
+                        else: 
+                            screen.blit(spr_mine, (rect_x, rect_y))
                     elif cell.neighbor_mines > 0:
-                        text = font.render(str(cell.neighbor_mines), True, COLORS['numbers'][cell.neighbor_mines])
-                        screen.blit(text, text.get_rect(center=rect.center))
-                elif cell.flagged:
-                    text = font.render("D", True, COLORS['text'])  
-                    screen.blit(text, text.get_rect(center=rect.center))
-                elif cell.question:
-                    text = font.render("?", True, COLORS['text'])
-                    screen.blit(text, text.get_rect(center=rect.center))
+                        screen.blit(number_sprites[cell.neighbor_mines], (rect_x, rect_y))
+                    else:
+                        screen.blit(spr_emptyGrid, (rect_x, rect_y))
+                else:
+                    screen.blit(spr_grid, (rect_x, rect_y))  # cell not revealed yet
+                    if cell.flagged:
+                        screen.blit(spr_flag, (rect_x, rect_y))  # flag
+                    elif cell.question:
+                        text = font.render("?", True, (255, 0, 0))  # question mark rendered text
+                        text_rect = text.get_rect(center=(rect_x + CELL_SIZE // 2, rect_y + CELL_SIZE // 2))
+                        screen.blit(text, text_rect)
