@@ -31,7 +31,7 @@ class Menu:
             Button(menu_x + (menu_width - button_width)//2, start_y + 280, button_width, button_height, 
                    TEXTS['exit'], self.exit_game)
         ]
-        
+        self.back_button = Button(50, 50, 100, 40, TEXTS['back'], self.return_to_menu)
         self.selected_difficulty = None
         self.showing_scores = False
         self.scores = {'easy': float('inf'), 'medium': float('inf'), 'hard': float('inf')}  
@@ -55,27 +55,26 @@ class Menu:
         screen.blit(title, (self.screen_width//2 - title.get_width()//2, 50))
         
         if self.showing_scores:
-                 
-                    back_button = Button(50, 50, 100, 40, TEXTS['back'], self.hide_scores)
-                    mouse_pos = pygame.mouse.get_pos()
-                    back_button.check_hover(mouse_pos)
-                    for event in pygame.event.get():
-                        if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
-                            back_button.handle_event(event)
-                    back_button.draw(screen, self.button_font)
-                    
-                    scores_title = self.title_font.render(TEXTS['highscores'], True, (255, 255, 255))
-                    screen.blit(scores_title, (self.screen_width//2 - scores_title.get_width()//2, 150))
-                    
-                    y_offset = 250
-                    for diff, score in self.scores.items():
-                        if score == float('inf'):
-                            score_text = f"{DIFFICULTIES[diff]['name']}: --"
-                        else:
-                            score_text = f"{DIFFICULTIES[diff]['name']}: {int(score)} sec"
-                        rendered_text = self.button_font.render(score_text, True, (255, 255, 255))
-                        screen.blit(rendered_text, (self.screen_width//2 - rendered_text.get_width()//2, y_offset))
-                        y_offset += 50
+            self.back_button.draw(screen, self.button_font)
+            mouse_pos = pygame.mouse.get_pos()
+            self.back_button.check_hover(mouse_pos)
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
+                    self.back_button.handle_event(event)
+            
+            
+            scores_title = self.title_font.render(TEXTS['highscores'], True, (255, 255, 255))
+            screen.blit(scores_title, (self.screen_width//2 - scores_title.get_width()//2, 150))
+            
+            y_offset = 250
+            for diff, score in self.scores.items():
+                if score == float('inf'):
+                    score_text = f"{DIFFICULTIES[diff]['name']}: --"
+                else:
+                    score_text = f"{DIFFICULTIES[diff]['name']}: {int(score)} sec"
+                rendered_text = self.button_font.render(score_text, True, (255, 255, 255))
+                screen.blit(rendered_text, (self.screen_width//2 - rendered_text.get_width()//2, y_offset))
+                y_offset += 50
 
         else:
         
@@ -84,11 +83,17 @@ class Menu:
                 button.check_hover(mouse_pos)
                 button.draw(screen, self.button_font)
     
-    def hide_scores(self):
+    # def hide_scores(self):
+    #     self.showing_scores = False
+
+    def return_to_menu(self):
         self.showing_scores = False
     
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
-                for button in self.buttons:
-                    button.handle_event(event)
+                if self.showing_scores:
+                    self.back_button.handle_event(event) 
+                else:
+                    for button in self.buttons:
+                        button.handle_event(event)

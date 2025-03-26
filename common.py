@@ -55,7 +55,7 @@ TEXTS = {
     'mines': "M: {}",
     'win': "You won!",
     'lose': "You lost!",
-    'highscores': "SCORES",
+    'highscores': "Hall of fame",
     'back': "Back",
     'exit': "Exit",
     'flags': "Flags: {}",
