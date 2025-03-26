@@ -47,7 +47,6 @@ class Board:
 
     def reveal(self, x, y):
         cell = self.grid[y][x]
-        
         if cell.revealed or cell.flagged or self.game_over:
             return False
         
@@ -56,6 +55,7 @@ class Board:
             self.place_mines((x, y))
             
         if cell.is_mine:
+            cell.revealed = True
             self.game_over = True
             return True
         
@@ -68,7 +68,8 @@ class Board:
                         continue
                     nx, ny = x + dx, y + dy
                     if 0 <= nx < self.width and 0 <= ny < self.height:
-                        self.reveal(nx, ny)
+                        if not self.grid[ny][nx].revealed:
+                            self.reveal(nx, ny)
         
         if self.check_win():
             self.win = True
@@ -112,9 +113,7 @@ class Board:
                 if cell.revealed:
                     if cell.is_mine:
                         if self.game_over:
-                            screen.blit(spr_mineClicked(rect_x, rect_y))
-                        else: 
-                            screen.blit(spr_mine, (rect_x, rect_y))
+                            screen.blit(spr_mineClicked, (rect_x, rect_y)) and screen.blit(spr_mine, (rect_x, rect_y))
                     elif cell.neighbor_mines > 0:
                         screen.blit(number_sprites[cell.neighbor_mines], (rect_x, rect_y))
                     else:
