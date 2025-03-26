@@ -56,6 +56,7 @@ class Board:
             
         if cell.is_mine:
             cell.revealed = True
+            cell.revealed = True  # Marquer la mine cliquée comme révélée
             self.game_over = True
             return True
         
@@ -105,6 +106,8 @@ class Board:
         return True
 
     def draw(self, screen, font, offset_y=0):
+        last_clicked_mine = None  # Variable pour suivre la mine cliquée
+        
         for y in range(self.height):
             for x in range(self.width):
                 cell = self.grid[y][x]
@@ -114,16 +117,26 @@ class Board:
                 if cell.revealed:
                     if cell.is_mine:
                         if self.game_over:
-                            screen.blit(spr_mineClicked, (rect_x, rect_y)) and screen.blit(spr_mine, (rect_x, rect_y))
+                            screen.blit(spr_mineClicked, (rect_x, rect_y))
+                        else: 
+                            screen.blit(spr_mine, (rect_x, rect_y))
                     elif cell.neighbor_mines > 0:
                         screen.blit(number_sprites[cell.neighbor_mines], (rect_x, rect_y))
                     else:
                         screen.blit(spr_emptyGrid, (rect_x, rect_y))
                 else:
-                    screen.blit(spr_grid, (rect_x, rect_y))  # cell not revealed yet
-                    if cell.flagged:
-                        screen.blit(spr_flag, (rect_x, rect_y))  # flag
-                    elif cell.question:
-                        text = font.render("?", True, (255, 0, 0))  # question mark rendered text
-                        text_rect = text.get_rect(center=(rect_x + CELL_SIZE // 2, rect_y + CELL_SIZE // 2))
-                        screen.blit(text, text_rect)
+                    # Si le jeu est terminé, révéler toutes les mines
+                    if self.game_over and cell.is_mine:
+                        # Différencier la mine cliquée des autres
+                        if cell.revealed:
+                            screen.blit(spr_mineClicked, (rect_x, rect_y))
+                        else:
+                            screen.blit(spr_mine, (rect_x, rect_y))
+                    else:
+                        screen.blit(spr_grid, (rect_x, rect_y))  # cell not revealed yet
+                        if cell.flagged:
+                            screen.blit(spr_flag, (rect_x, rect_y))  # flag
+                        elif cell.question:
+                            text = font.render("?", True, (255, 0, 0))  # question mark rendered text
+                            text_rect = text.get_rect(center=(rect_x + CELL_SIZE // 2, rect_y + CELL_SIZE // 2))
+                            screen.blit(text, text_rect)
