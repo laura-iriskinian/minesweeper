@@ -3,10 +3,10 @@ import random
 import time
 import os
 
-# Инициализация pygame
+
 pygame.init()
 
-# Константы
+
 CELL_SIZE = 30
 MARGIN = 1
 COLORS = {
@@ -24,30 +24,45 @@ COLORS = {
 }
 
 DIFFICULTIES = {
-    'easy': {'size': (15, 14), 'mines': (10, 15), 'name': 'Facile'},
-    'medium': {'size': (22, 22), 'mines': (40, 60), 'name': 'Moyen'},
-    'hard': {'size': (30, 20), 'mines': (99, 150), 'name': 'Difficile'}
+    'easy': {'size': (15, 14), 'mines': (10, 15), 'name': 'Easy'},
+    'medium': {'size': (22, 22), 'mines': (40, 60), 'name': 'Medium'},
+    'hard': {'size': (30, 20), 'mines': (99, 150), 'name': 'Difficult'}
 }
 
-# Тексты на французском
+# Import files
+spr_emptyGrid = pygame.image.load("Sprites/empty.png")
+spr_flag = pygame.image.load("Sprites/flag.png")
+spr_grid = pygame.image.load("Sprites/Grid.png")
+spr_grid1 = pygame.image.load("Sprites/grid1.png")
+spr_grid2 = pygame.image.load("Sprites/grid2.png")
+spr_grid3 = pygame.image.load("Sprites/grid3.png")
+spr_grid4 = pygame.image.load("Sprites/grid4.png")
+spr_grid5 = pygame.image.load("Sprites/grid5.png")
+spr_grid6 = pygame.image.load("Sprites/grid6.png")
+spr_grid7 = pygame.image.load("Sprites/grid7.png")
+spr_grid8 = pygame.image.load("Sprites/grid8.png")
+spr_mine = pygame.image.load("Sprites/mine.png")
+spr_mineClicked = pygame.image.load("Sprites/mineClicked.png")
+spr_mineFalse = pygame.image.load("Sprites/mineFalse.png")
+
 TEXTS = {
-    'title': "DÉMINEUR",
+    'title': "MINE SWEEPER",
     'menu': "Menu",
-    'restart': "Rec",
+    'restart': "Reset",
     'time': "T: {} sec",
     'mines': "M: {}",
-    'win': "Gagné!",
-    'lose': "Perdu!",
+    'win': "You won!",
+    'lose': "You lost!",
     'highscores': "SCORES",
-    'back': "Retour",
-    'exit': "Quitter",
-    'flags': "Drapeaux: {}",
-    'easy': "Facile",
-    'medium': "Moyen",
-    'hard': "Difficile"
+    'back': "Back",
+    'exit': "Exit",
+    'flags': "Flags: {}",
+    'easy': "Easy",
+    'medium': "Medium",
+    'hard': "Difficult"
 }
 
-# Загрузка изображения бомбы
+
 def load_image(name, size):
     try:
         image = pygame.image.load(name)
@@ -56,15 +71,15 @@ def load_image(name, size):
         surface = pygame.Surface(size)
         surface.fill((255, 0, 0))
         font = pygame.font.SysFont('Arial', 20)
-        text = font.render("BOMBE", True, (255, 255, 255))
+        text = font.render("BOMB", True, (255, 255, 255))
         surface.blit(text, (size[0]//2 - text.get_width()//2, size[1]//2 - text.get_height()//2))
         return surface
 
-# Создаем папку для изображений если её нет
+
 if not os.path.exists('images'):
     os.makedirs('images')
 
-# Сохраняем простое изображение бомбы если его нет
+
 if not os.path.exists('images/bomb.png'):
     bomb_img = pygame.Surface((CELL_SIZE-10, CELL_SIZE-10))
     bomb_img.fill((0, 0, 0))
@@ -219,7 +234,7 @@ class Board:
                         text = font.render(str(cell.neighbor_mines), True, COLORS['numbers'][cell.neighbor_mines])
                         screen.blit(text, text.get_rect(center=rect.center))
                 elif cell.flagged:
-                    text = font.render("D", True, COLORS['text'])  # D pour Drapeau
+                    text = font.render("D", True, COLORS['text'])  
                     screen.blit(text, text.get_rect(center=rect.center))
                 elif cell.question:
                     text = font.render("?", True, COLORS['text'])
@@ -268,13 +283,13 @@ class Menu:
         self.title_font = pygame.font.SysFont('Arial', 50, bold=True)
         self.button_font = pygame.font.SysFont('Arial', 30)
         
-        # Центрируем меню
+      
         menu_width = 300
         menu_height = 400
         menu_x = (screen_width - menu_width) // 2
         menu_y = (screen_height - menu_height) // 2
         
-        # Создаем кнопки
+       
         button_width = 200
         button_height = 50
         start_y = menu_y + 80
@@ -294,7 +309,7 @@ class Menu:
         
         self.selected_difficulty = None
         self.showing_scores = False
-        self.scores = {'easy': float('inf'), 'medium': float('inf'), 'hard': float('inf')}  # Используем inf вместо 999
+        self.scores = {'easy': float('inf'), 'medium': float('inf'), 'hard': float('inf')}  
     
     def set_difficulty(self, difficulty):
         self.selected_difficulty = difficulty
@@ -307,15 +322,15 @@ class Menu:
         exit()
     
     def draw(self, screen):
-        # Фон
+      
         screen.fill(COLORS['menu_bg'])
         
-        # Заголовок
+        
         title = self.title_font.render(TEXTS['title'], True, (255, 255, 255))
         screen.blit(title, (self.screen_width//2 - title.get_width()//2, 50))
         
         if self.showing_scores:
-                    # Отображение рекордов
+                 
                     back_button = Button(50, 50, 100, 40, TEXTS['back'], self.hide_scores)
                     mouse_pos = pygame.mouse.get_pos()
                     back_button.check_hover(mouse_pos)
@@ -338,7 +353,7 @@ class Menu:
                         y_offset += 50
 
         else:
-            # Кнопки меню
+        
             mouse_pos = pygame.mouse.get_pos()
             for button in self.buttons:
                 button.check_hover(mouse_pos)
@@ -380,11 +395,11 @@ class Game:
                     running = False
             
             if self.game_active:
-                # Игровой режим
+             
                 self.handle_game_events(events)
                 self.draw_game()
             else:
-                # Меню
+              
                 self.menu.handle_events(events)
                 self.menu.draw(self.screen)
                 
@@ -405,7 +420,7 @@ class Game:
         self.start_time = None
         self.elapsed_time = 0
         
-        # Рассчитываем размер окна
+       
         width = config['size'][0] * (CELL_SIZE + MARGIN)
         height = config['size'][1] * (CELL_SIZE + MARGIN) + self.top_panel_height
         self.screen = pygame.display.set_mode((width, height))
@@ -419,44 +434,44 @@ class Game:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 
-                # Проверяем клик на верхней панели
+         
                 if pos[1] < self.top_panel_height:
-                    # Кнопка меню
+            
                     menu_button_rect = pygame.Rect(10, 10, 100, 40)
                     if menu_button_rect.collidepoint(pos):
                         self.return_to_menu()
                         return
                     
-                    # Кнопка рестарта
+                  
                     restart_rect = pygame.Rect(self.screen.get_width() - 110, 10, 100, 40)
                     if restart_rect.collidepoint(pos):
                         self.reset()
                         return
                 
-                # Проверяем клик на поле (учитываем смещение панели)
+           
                 elif pos[1] >= self.top_panel_height:
                     x = pos[0] // (CELL_SIZE + MARGIN)
                     y = (pos[1] - self.top_panel_height) // (CELL_SIZE + MARGIN)
                     
                     if 0 <= x < self.board.width and 0 <= y < self.board.height:
-                        if event.button == 1:  # Левый клик
+                        if event.button == 1:  
                             if self.start_time is None and not self.board.first_click:
                                 self.start_time = time.time()
                             self.board.reveal(x, y)
-                        elif event.button == 3:  # Правый клик
+                        elif event.button == 3:  
                             self.board.toggle_flag(x, y)
     
     def draw_game(self):
         screen_width, screen_height = self.screen.get_size()
         self.screen.fill((220, 220, 220))
         
-        # Рисуем верхнюю панель
+    
         panel_rect = pygame.Rect(0, 0, screen_width, self.top_panel_height)
         pygame.draw.rect(self.screen, (180, 180, 180), panel_rect)
         pygame.draw.line(self.screen, (150, 150, 150), (0, self.top_panel_height), 
                          (screen_width, self.top_panel_height), 2)
         
-        # Кнопка меню
+      
         menu_button = Button(10, 10, 100, 40, TEXTS['menu'], self.return_to_menu)
         mouse_pos = pygame.mouse.get_pos()
         menu_button.check_hover(mouse_pos)
@@ -465,7 +480,7 @@ class Game:
                 menu_button.handle_event(event)
         menu_button.draw(self.screen, self.font)
         
-        # Кнопка рестарта
+       
         restart_button = Button(screen_width - 110, 10, 100, 40, TEXTS['restart'], self.reset)
         restart_button.check_hover(mouse_pos)
         for event in pygame.event.get():
@@ -473,33 +488,33 @@ class Game:
                 restart_button.handle_event(event)
         restart_button.draw(self.screen, self.font)
         
-        # Таймер
+  
         if self.start_time and not self.board.game_over:
             self.elapsed_time = time.time() - self.start_time
         time_text = self.font.render(TEXTS['time'].format(int(self.elapsed_time)), True, (0, 0, 0))
         self.screen.blit(time_text, (screen_width//2 - time_text.get_width()//2, 20))
-        
-        # Мины и флаги
+    
+
         mines_text = self.font.render(TEXTS['mines'].format(len(self.board.mines) - self.board.flags), True, (0, 0, 0))
         self.screen.blit(mines_text, (150, 20))
         
-        # Рисуем игровое поле (со смещением вниз на top_panel_height)
+
         self.board.draw(self.screen, self.font, self.top_panel_height)
         
-        # Сообщение о победе/поражении
+   
         if self.board.game_over:
             message = TEXTS['win'] if self.board.win else TEXTS['lose']
             text = self.big_font.render(message, True, (255, 0, 0))
             text_rect = text.get_rect(center=(screen_width//2, screen_height//2))
             
-            # Полупрозрачный фон для сообщения
+           
             s = pygame.Surface((text_rect.width + 40, text_rect.height + 20), pygame.SRCALPHA)
             s.fill((0, 0, 0, 128))
             self.screen.blit(s, (text_rect.x - 20, text_rect.y - 10))
             
             self.screen.blit(text, text_rect)
             
-            # Обновляем рекорды
+
             if self.board.win and self.elapsed_time < self.menu.scores[self.difficulty]:
                 self.menu.scores[self.difficulty] = self.elapsed_time
 
