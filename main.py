@@ -76,15 +76,15 @@ def load_image(name, size):
         return surface
 
 
-if not os.path.exists('images'):
-    os.makedirs('images')
+# if not os.path.exists('images'):
+#     os.makedirs('images')
 
 
-if not os.path.exists('images/bomb.png'):
-    bomb_img = pygame.Surface((CELL_SIZE-10, CELL_SIZE-10))
-    bomb_img.fill((0, 0, 0))
-    pygame.draw.circle(bomb_img, (255, 0, 0), (CELL_SIZE//2-5, CELL_SIZE//2-5), CELL_SIZE//2-5)
-    pygame.image.save(bomb_img, 'images/bomb.png')
+# if not os.path.exists('images/bomb.png'):
+#     bomb_img = pygame.Surface((CELL_SIZE-10, CELL_SIZE-10))
+#     bomb_img.fill((0, 0, 0))
+#     pygame.draw.circle(bomb_img, (255, 0, 0), (CELL_SIZE//2-5, CELL_SIZE//2-5), CELL_SIZE//2-5)
+#     pygame.image.save(bomb_img, 'images/bomb.png')
 
 bomb_image = load_image('images/bomb.png', (CELL_SIZE-10, CELL_SIZE-10))
 
@@ -150,6 +150,7 @@ class Board:
                     if 0 <= nx < self.width and 0 <= ny < self.height:
                         self.grid[ny][nx].neighbor_mines += 1
 
+    # game conditions
     def reveal(self, x, y):
         cell = self.grid[y][x]
         
@@ -206,7 +207,8 @@ class Board:
                 if not cell.is_mine and not cell.revealed:
                     return False
         return True
-
+    
+    #sprites
     def draw(self, screen, font, offset_y=0):
         for y in range(self.height):
             for x in range(self.width):
@@ -229,13 +231,12 @@ class Board:
                 
                 if cell.revealed:
                     if cell.is_mine:
-                        screen.blit(bomb_image, (rect.x+5, rect.y+5))
+                        screen.blit(spr_mineClicked, rect)
                     elif cell.neighbor_mines > 0:
                         text = font.render(str(cell.neighbor_mines), True, COLORS['numbers'][cell.neighbor_mines])
                         screen.blit(text, text.get_rect(center=rect.center))
                 elif cell.flagged:
-                    text = font.render("D", True, COLORS['text'])  
-                    screen.blit(text, text.get_rect(center=rect.center))
+                    screen.blit(spr_flag, rect)
                 elif cell.question:
                     text = font.render("?", True, COLORS['text'])
                     screen.blit(text, text.get_rect(center=rect.center))
