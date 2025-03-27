@@ -3,7 +3,6 @@ from common import *
 from board import Board
 from button import Button
 import time
-from common import save_score
 
 
 class Game:

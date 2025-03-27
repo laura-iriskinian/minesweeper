@@ -1,6 +1,5 @@
 from button import Button
 from common import *
-from common import save_score
 
 class Menu:
     def __init__(self, screen_width, screen_height):
@@ -33,6 +32,7 @@ class Menu:
                     TEXTS['exit'], self.exit_game)
         ]
         
+        self.back_button = Button(50, 50, 100, 40, TEXTS['back'], self.return_to_menu)
         self.selected_difficulty = None
         self.showing_scores = False
         if os.path.exists("scores.json"):
@@ -72,15 +72,15 @@ class Menu:
         
         if self.showing_scores:
             # Bouton retour
-            back_button = Button(50, 50, 100, 40, TEXTS['back'], self.hide_scores)
+            
             mouse_pos = pygame.mouse.get_pos()
-            back_button.check_hover(mouse_pos)
+            self.back_button.check_hover(mouse_pos)
 
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
-                    back_button.handle_event(event)
+                    self.back_button.handle_event(event)
 
-            back_button.draw(screen, self.button_font)
+            self.back_button.draw(screen, self.button_font)
 
             # Titre des scores
             scores_title = self.title_font.render(TEXTS['highscores'], True, (255, 255, 255))
@@ -111,11 +111,17 @@ class Menu:
                 button.draw(screen, self.button_font)
 
     
-    def hide_scores(self):
+    # def hide_scores(self):
+    #     self.showing_scores = False
+
+    def return_to_menu(self):
         self.showing_scores = False
     
     def handle_events(self, events):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
-                for button in self.buttons:
-                    button.handle_event(event)
+                if self.showing_scores:
+                    self.back_button.handle_event(event) 
+                else:
+                    for button in self.buttons:
+                        button.handle_event(event)
