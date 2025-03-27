@@ -5,7 +5,7 @@ class Menu:
     def __init__(self, screen_width, screen_height):
         self.screen_width = screen_width
         self.screen_height = screen_height
-        self.title_font = pygame.font.SysFont('Arial', 50, bold=True)
+        self.title_font = pygame.font.SysFont('Arial', 50, bold = True, italic = True)
         self.button_font = pygame.font.SysFont('Arial', 30)
         
 
@@ -70,6 +70,9 @@ class Menu:
     def draw(self, screen):
         screen.fill(COLORS['menu_bg'])
         
+        title = self.title_font.render(TEXTS['title'], True, (255, 255, 255))
+        screen.blit(title, (self.screen_width//2 - title.get_width()//2, 50))
+
         if self.showing_scores:
             # Bouton retour
             
