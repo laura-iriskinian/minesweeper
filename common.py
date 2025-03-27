@@ -40,6 +40,7 @@ spr_mine = pygame.image.load("Sprites/mine.png")
 spr_mineClicked = pygame.image.load("Sprites/mineClicked.png")
 spr_mineFalse = pygame.image.load("Sprites/mineFalse.png")
 
+#variable of number sprites
 number_sprites = {
     1: spr_grid1, 2: spr_grid2, 3: spr_grid3, 4: spr_grid4,
     5: spr_grid5, 6: spr_grid6, 7: spr_grid7, 8: spr_grid8
@@ -63,11 +64,11 @@ TEXTS = {
 }
 
 def save_score(difficulty, score):
-    """Ajoute un nouveau score et sauvegarde les N meilleurs (plus bas) temps."""
-    # Nombre de scores à conserver
-    MAX_SCORES = 1  # Vous pouvez changer cette valeur
+    """method to add new score and save to json file N best (lower) times """
+    # Amount of scores to save
+    MAX_SCORES = 1  # Value can be changed
 
-    # Charger les scores existants
+    # Load existing scores
     if os.path.exists("scores.json"):
         with open("scores.json", "r") as f:
             try:
@@ -77,35 +78,23 @@ def save_score(difficulty, score):
     else:
         scores = {'easy': [], 'medium': [], 'hard': []}
     
-    # Ajouter le nouveau score
+    # Add new score
     if difficulty not in scores:
         scores[difficulty] = []
     
     scores[difficulty].append(score)
-    # Garder uniquement les N plus bas temps
+    # Keep only N lowest times
     scores[difficulty] = sorted(scores[difficulty])[:MAX_SCORES]
 
-    # Sauvegarder les scores
+    # Save scores
     with open("scores.json", "w") as f:
         json.dump(scores, f, indent=4)
 
 def show_scores(self):
-    """Affiche les scores lorsqu'on clique sur le bouton."""
-    self.load_scores()  # Charger les scores depuis le fichier
+    """Display scores when button clicked"""
+    self.load_scores()  
     self.showing_scores = True
 
-
-def load_image(name, size):
-    try:
-        image = pygame.image.load(name)
-        return pygame.transform.scale(image, size)
-    except:
-        surface = pygame.Surface(size)
-        surface.fill((255, 0, 0))
-        font = pygame.font.SysFont('Arial', 20)
-        text = font.render("BOMB", True, (255, 255, 255))
-        surface.blit(text, (size[0]//2 - text.get_width()//2, size[1]//2 - text.get_height()//2))
-        return surface
 
 
 

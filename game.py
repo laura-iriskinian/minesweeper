@@ -6,6 +6,7 @@ import time
 
 
 class Game:
+    """ Initiate game"""
     def __init__(self):
         self.difficulty = None
         self.screen = None
@@ -20,12 +21,14 @@ class Game:
         self.top_panel_height = 60
     
     def run(self):
+        """ method to run the programm/game"""
         self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption(TEXTS['title'])
         self.menu = Menu(800, 600)
         
         running = True
         while running:
+            #handle events in main loop
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:
@@ -52,21 +55,23 @@ class Game:
         pygame.quit()
     
     def reset(self):
+        """ method to reset the game"""
         config = DIFFICULTIES[self.difficulty]
         self.board = Board(config['size'][0], config['size'][1], config['mines'])
         self.start_time = None
         self.elapsed_time = 0
         
-
         width = config['size'][0] * (CELL_SIZE + MARGIN)
         height = config['size'][1] * (CELL_SIZE + MARGIN) + self.top_panel_height
         self.screen = pygame.display.set_mode((width, height))
     
     def return_to_menu(self):
+        """ method to return to menu"""
         self.game_active = False
         self.screen = pygame.display.set_mode((800, 600))
     
     def handle_game_events(self, events):
+        """ method to handle events in game state"""
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
@@ -99,16 +104,17 @@ class Game:
                             self.board.toggle_flag(x, y)
     
     def draw_game(self):
+        """ method to display game screen"""
         screen_width, screen_height = self.screen.get_size()
         self.screen.fill((220, 220, 220))
         
-    
+        # top panel with mines remaining and timer
         panel_rect = pygame.Rect(0, 0, screen_width, self.top_panel_height)
         pygame.draw.rect(self.screen, (180, 180, 180), panel_rect)
         pygame.draw.line(self.screen, (150, 150, 150), (0, self.top_panel_height), 
                         (screen_width, self.top_panel_height), 2)
         
-
+        #menu buttons
         menu_button = Button(10, 10, 100, 40, TEXTS['menu'], self.return_to_menu)
         mouse_pos = pygame.mouse.get_pos()
         menu_button.check_hover(mouse_pos)
@@ -117,7 +123,6 @@ class Game:
                 menu_button.handle_event(event)
         menu_button.draw(self.screen, self.font)
         
-
         restart_button = Button(screen_width - 110, 10, 100, 40, TEXTS['restart'], self.reset)
         restart_button.check_hover(mouse_pos)
         for event in pygame.event.get():
@@ -125,33 +130,32 @@ class Game:
                 restart_button.handle_event(event)
         restart_button.draw(self.screen, self.font)
         
-
+        # timer
         if self.start_time and not self.board.game_over:
             self.elapsed_time = time.time() - self.start_time
         time_text = self.font.render(TEXTS['time'].format(int(self.elapsed_time)), True, (0, 0, 0))
         self.screen.blit(time_text, (screen_width//2 - time_text.get_width()//2, 20))
-    
 
+        # mines remaining
         mines_text = self.font.render(TEXTS['mines'].format(len(self.board.mines) - self.board.flags), True, (0, 0, 0))
         self.screen.blit(mines_text, (150, 20))
-        
 
+        # display game board and top panel
         self.board.draw(self.screen, self.font, self.top_panel_height)
         
-
+        #display game over message
         if self.board.game_over:
             message = TEXTS['win'] if self.board.win else TEXTS['lose']
             text = self.big_font.render(message, True, (255, 0, 0))
             text_rect = text.get_rect(center=(screen_width//2, screen_height//2))
             
-
             s = pygame.Surface((text_rect.width + 40, text_rect.height + 20), pygame.SRCALPHA)
             s.fill((0, 0, 0, 128))
             self.screen.blit(s, (text_rect.x - 20, text_rect.y - 10))
             
             self.screen.blit(text, text_rect)
             
-
+            #if player wins, save score to json if among N lowest times for difficulty level
             if self.board.win :
                 save_score(self.difficulty, round(self.elapsed_time, 1))
 

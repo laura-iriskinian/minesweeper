@@ -1,6 +1,7 @@
 from common import *
 
 class Button:
+    """ Initiate button"""
     def __init__(self, x, y, width, height, text, action=None):
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
@@ -9,7 +10,9 @@ class Button:
         self.clicked = False
     
     def draw(self, screen, font):
+        """ display buttons"""
         color = COLORS['button_hover'] if self.hovered else COLORS['button']
+
         if self.clicked:
             color = (80, 80, 80)
         

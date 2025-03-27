@@ -2,6 +2,7 @@ from button import Button
 from common import *
 
 class Menu:
+    """initiate main menu"""
     def __init__(self, screen_width, screen_height):
         self.screen_width = screen_width
         self.screen_height = screen_height
@@ -31,10 +32,11 @@ class Menu:
             Button(menu_x + (menu_width - button_width)//2, start_y + 280, button_width, button_height, 
                     TEXTS['exit'], self.exit_game)
         ]
-        
+        #back button for hall of fame
         self.back_button = Button(50, 50, 100, 40, TEXTS['back'], self.return_to_menu)
         self.selected_difficulty = None
         self.showing_scores = False
+        #open json file to save scores
         if os.path.exists("scores.json"):
             with open("scores.json", "r") as f:
                 try:
@@ -45,10 +47,11 @@ class Menu:
             self.scores = {'easy': [], 'medium': [], 'hard': []}
     
     def set_difficulty(self, difficulty):
+        """method to set the difficulty level selected"""
         self.selected_difficulty = difficulty
     
     def load_scores(self):
-        """Recharge les scores depuis le fichier JSON."""
+        """method to load json with best cores"""
         if os.path.exists("scores.json"):
             with open("scores.json", "r") as f:
                 try:
@@ -59,23 +62,25 @@ class Menu:
             self.scores = {'easy': [], 'medium': [], 'hard': []}
 
     def show_scores(self):
-        """Charge les scores avant de les afficher."""
-        self.load_scores()  # Ajoutez cet appel
+        """load scores before displaying them"""
+        self.load_scores()  
         self.showing_scores = True
         
     def exit_game(self):
+        """possibility to exit the game through button"""
         pygame.quit()
         exit()
     
     def draw(self, screen):
+        """method to display the menu"""
         screen.fill(COLORS['menu_bg'])
 
+        #main title
         title = self.title_font.render(TEXTS['title'], True, (255, 255, 255))
         screen.blit(title, (self.screen_width//2 - title.get_width()//2, 50))
         
-        if self.showing_scores:
-            # Bouton retour
-            
+        #hall of fame menu
+        if self.showing_scores:            
             mouse_pos = pygame.mouse.get_pos()
             self.back_button.check_hover(mouse_pos)
 
@@ -85,20 +90,20 @@ class Menu:
 
             self.back_button.draw(screen, self.button_font)
 
-            # Titre des scores
+            # Score titles
             scores_title = self.title_font.render(TEXTS['highscores'], True, (255, 255, 255))
             screen.blit(scores_title, (self.screen_width // 2 - scores_title.get_width() // 2, 150))
 
-            # Nombre de scores à afficher
-            MAX_SCORES_DISPLAY = 1  # Vous pouvez changer cette valeur
+            # number os scores to display
+            MAX_SCORES_DISPLAY = 1  # This can be modified 
 
-            # Affichage des meilleurs scores pour chaque difficulté
+            # Display of best score per level
             y_offset = 250
             for diff, scores in self.scores.items():
-                if scores:  # Ne traiter que les difficultés avec des scores
+                if scores:  
                     scores_text = f"{DIFFICULTIES[diff]['name']}: " 
                     
-                    # Prend les N plus bas temps et les formate
+                    # Gets the smallest times and formats them
                     lowest_scores = sorted(scores)[:MAX_SCORES_DISPLAY]
                     scores_text += ", ".join(f"{s} sec" for s in lowest_scores)
 
@@ -107,20 +112,19 @@ class Menu:
                     y_offset += 50
 
         else:
-            # Affichage des boutons du menu
+            # Display of menu buttons
             mouse_pos = pygame.mouse.get_pos()
             for button in self.buttons:
                 button.check_hover(mouse_pos)
                 button.draw(screen, self.button_font)
 
-    
-    # def hide_scores(self):
-    #     self.showing_scores = False
 
     def return_to_menu(self):
+        """method to return to main menu"""
         self.showing_scores = False
     
     def handle_events(self, events):
+        """handle events in menu"""
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.MOUSEBUTTONUP:
                 if self.showing_scores:
